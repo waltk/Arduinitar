@@ -73,45 +73,31 @@ int mapbuttonValue;        // variable for reading the button status
 int mapbuttonState;        // variable to hold the button state
 int mapMode = 0; 
 
-// tableMode LED
-//const int LED1_PIN = 10;// the number of the LED pin  
-//const int LED2_PIN = 11;    // the number of the LED pin  
-//const int LED3_PIN = 12;    // the number of the LED pin  
-
-//int tabl eModeLEDState = 0;     // ledState used to set the LED
-//long previousMillis = 0;       // will store last time LED was updated
-//int BlinkRate = 5;            // no of blinks per second i.e. fps - empirically tested as just slow enough to count
-//int BlinkCount = 0;           // variable to store number of blinks
-//int BlinkLoopLength = 14;    // err... blink loop length
-
-// tableMode LED
 Metronome ledMetro(800);
 const int LED2_PIN = 11;
 unsigned int modeBlink = 900;
 
 void chooseTable(){
-  buttonValue = digitalRead(TABLE_PIN);      // read input value and store it in val
-
-  if (buttonValue != buttonState) {         // the button state has changed!
-    if (buttonValue == 1) {                // check if the button is pressed
-      if (tableMode == 0) {          // if set to smooth logarithmic mapping
-        tableMode = 1;               // switch to stepped chromatic mapping
-      } 
-      else if (tableMode == 1) {        // if stepped chromatic mapping
-          tableMode = 2;             // switch to stepped major Diatonic mapping
-        }     
-      else if (tableMode == 2) {        // if stepped chromatic mapping
-          tableMode = 3;             // switch to stepped major Diatonic mapping
+  buttonValue = digitalRead(TABLE_PIN);
+  if (buttonValue != buttonState) {
+    if (buttonValue == 1) {
+      if (tableMode == 0) {
+        tableMode = 1;
+      }
+      else if (tableMode == 1) {
+          tableMode = 2;
+        }
+      else if (tableMode == 2) {
+          tableMode = 3;
         }
       else if (tableMode == 3) {
         tableMode = 0;
       }
-    }  
-    buttonState = buttonValue;                 // save the new state in our variable     
-    
+    }
+    buttonState = buttonValue;    
   }
 
-    if(tableMode == 0){
+  if(tableMode == 0){
     inGuitar1.setTable(SIN2048_DATA);
     inGuitar2.setTable(SIN2048_DATA);
     inGuitar3.setTable(SIN2048_DATA);
@@ -139,36 +125,32 @@ void chooseTable(){
         ledMetro.set(modeBlink - 300);
   } else if (tableMode == 2){
         ledMetro.set(modeBlink - 600);
-  }
-  
+  }  
 }
 
 void choosemapMode(){
-    buttonValue = digitalRead(MAP_PIN);      // read input value and store it in val
-
-  if (mapbuttonValue != mapbuttonState) {         // the button state has changed!
-    if (mapbuttonValue == 1) {                // check if the button is pressed
-      if (mapMode == 0) {          // if set to smooth logarithmic mapping
-        mapMode = 1;               // switch to stepped chromatic mapping
-      } 
-      else if (mapMode == 1) {        // if stepped chromatic mapping
-          mapMode = 2;             // switch to stepped major Diatonic mapping
-        }     
-      else if (mapMode == 2) {        // if stepped chromatic mapping
-          mapMode = 3;             // switch to stepped major Diatonic mapping
+  buttonValue = digitalRead(MAP_PIN);
+  if (mapbuttonValue != mapbuttonState) {
+    if (mapbuttonValue == 1) {
+      if (mapMode == 0) {
+        mapMode = 1;
+      }
+      else if (mapMode == 1) {
+          mapMode = 2;
+        }
+      else if (mapMode == 2) {
+          mapMode = 3;
         }
       else if (mapMode == 3) {
         mapMode = 0;
       }
-    }  
-    mapbuttonState = mapbuttonValue;                 // save the new state in our variable     
-    
+    }
+    mapbuttonState = mapbuttonValue;    
   }
 }
 
 // MAPPINGS - START
 // Smooth logarithmic mapping
-//
 uint16_t antilogTable[] = {
   64830,64132,63441,62757,62081,61413,60751,60097,59449,58809,58176,57549,56929,56316,55709,55109,
   54515,53928,53347,52773,52204,51642,51085,50535,49991,49452,48920,48393,47871,47356,46846,46341,
@@ -180,7 +162,6 @@ uint16_t mapPhaseInc(uint16_t input) {
 }
 
 // Stepped chromatic mapping
-//
 uint16_t midiTable[] = {
   0,17,18,19,20,22,23,24,26,27,29,31,32,34,36,38,41,43,46,48,51,54,58,61,65,69,73,
   77,82,86,92,97,103,109,115,122,129,137,145,154,163,173,183,194,206,218,231,
@@ -196,7 +177,6 @@ uint16_t mapMidi(uint16_t input) {
 }
 
 //// Stepped Pentatonic mapping
-//
 uint16_t pentatonicTable[54] = {
   0,19,22,26,29,32,38,43,51,58,65,77,86,103,115,129,154,173,206,231,259,308,346,
   411,461,518,616,691,822,923,1036,1232,1383,1644,1845,2071,2463,2765,3288,
@@ -208,9 +188,7 @@ uint16_t mapPentatonic(uint16_t input) {
   return (pentatonicTable[value]);
 }
 
-// Lewis added - I've got an Excel spreadsheet with these workings out on my blog...
 // Stepped major Diatonic mapping
-//
 uint16_t majordiatonicTable[76] = {
   0,17,19,22,23,26,29,32,34,38,43,46,51,58,65,69,77,86,92,103,115,129,137,154,173,183,206,231,259,274,308,346,366,
   411,461,518,549,616,691,732,822,923,1036,1097,1232,1383,1465,1644,1845,2071,2195,2463,2765,2930,3288,
@@ -223,7 +201,6 @@ uint16_t mapmajorDiatonic(uint16_t input) {
 }
 
 // Stepped minor Diatonic mapping
-//
 uint16_t minordiatonicTable[76] = {
   0,17,19,20,23,26,27,31,34,38,41,46,51,54,61,69,77,82,92,103,109,122,137,154,163,183,206,218,244,274,308,326,366,
   411,435,489,549,616,652,732,822,871,978,1097,1232,1305,1465,1644,1742,1955,2195,2463,2610,2930,3288,
@@ -236,7 +213,6 @@ uint16_t mapminorDiatonic(uint16_t input) {
 }
 
 // Stepped major Pentatonic mapping
-//
 uint16_t majorpentatonicTable[55] = {
   0,17,19,22,26,29,34,38,43,51,58,69,77,86,103,115,137,154,173,206,231,274,308,346,
   411,461,549,616,691,822,923,1097,1232,1383,1644,1845,2195,2463,2765,3288,
@@ -249,7 +225,6 @@ uint16_t mapmajorPentatonic(uint16_t input) {
 }
 
 // Stepped minor Pentatonic mapping
-//
 uint16_t minorpentatonicTable[55] = {
   0,17,20,23,26,31,34,41,46,51,61,69,82,92,103,122,137,163,183,206,244,274,326,366,
   411,489,549,652,732,822,978,1097,1305,1465,1644,1955,2195,2610,2930,3288,
@@ -268,15 +243,9 @@ void setup(){
   pinMode(GUITAR2_PIN, INPUT_PULLUP);
   pinMode(GUITAR3_PIN, INPUT_PULLUP);
   pinMode(TABLE_PIN, INPUT_PULLUP);
+  pinMode(LED2_PIN, OUTPUT);
 
-//  pinMode(tableModeLED_PIN, OUTPUT);
-//pinMode(LED1_PIN, OUTPUT);
-pinMode(LED2_PIN, OUTPUT);
-//pinMode(LED3_PIN, OUTPUT);
-
-  ledMetro.start(modeBlink);
-
-  
+  ledMetro.start(modeBlink);  
   Serial.begin(9600); 
   //Serial.begin(115200); // set up the Serial output for debugging
   startMozzi(CONTROL_RATE); 
@@ -286,14 +255,11 @@ void updateControl(){
 
   chooseTable();
   choosemapMode();
-
   static Q16n16 midiNote, midiNoteInt, baseFrequency;
   static long midiNoteFrac;
-
-
-  volumeRead = mozziAnalogRead(VOLUME_PIN);  //maybe switch back to masterVolume unmapped...
+  volumeRead = mozziAnalogRead(VOLUME_PIN); // unmapped
   
-//  masterVolume = map(volumeRead, 0, 1023, 0, 255); //it sounded better this way...
+  // masterVolume = map(volumeRead, 0, 1023, 0, 255); // mapped
     
   masterVolume = volumeMap(volumeRead);
   if (masterVolume < 40) {
@@ -301,8 +267,6 @@ void updateControl(){
   } else {
       masterVolume;   
   }
-
-  //masterVolume = mozziAnalogRead(VOLUME_PIN);  //maybe switch back to masterVolume unmapped...0 - 1024
 
   pitch = mozziAnalogRead(PITCH_PIN);
 
@@ -317,21 +281,13 @@ void updateControl(){
   } 
     
   tuning = mozziAnalogRead(TUNING_PIN);
-
-//  inBass.setFreq(pitch); 
-//  inGuitar1.setFreq(pitch * 2); 
-//  inGuitar2.setFreq(pitch << 2); 
-//  inGuitar3.setFreq(pitch * 5); 
-
-
-
   
-  /* pitch: 0 = minimum value; 1024 = +32 semitones (~2.5 octaves) 
-   * 6 bits left to get to decimal point + 5 bits more = 11 bit shift */
+  // pitch: 0 = minimum value; 1024 = +32 semitones (~2.5 octaves) 
+  // 6 bits left to get to decimal point + 5 bits more = 11 bit shift
   
   midiNote = MIDI_NOTE_MIN + (Q16n16)(pitch << 11);
 
-    /* Set the amount the pitch is quantized. */
+  // Set the amount the pitch is quantized.
   midiNoteInt = (midiNote + 0x00008000) & 0xFFFF0000; // Nearest MIDI note (Q16n16 rounding)
   midiNoteFrac = (long)midiNote - (long)midiNoteInt; /* Fractional part only */
   midiNoteFrac = (midiNoteFrac * (1023 - tuning)) >> 10; /* Scale the fractional part */
@@ -349,39 +305,19 @@ void updateControl(){
   guitar2Button = digitalRead(GUITAR2_PIN);
   guitar3Button = digitalRead(GUITAR3_PIN);
   
-  //Serial.print(bassButton);
-  //Serial.print(guitar1Button);
-  //Serial.print(guitar2Button);
-  //Serial.print(guitar3Button);
-    //Serial.println("-");
-
- // Serial.println(out1, BIN);
-  //Serial.print(out2);
-  //Serial.print(finalOut);
-   // Serial.println(digitalRead(LED2_PIN));
-    
- 
- // Serial.println(finalOut, BIN);
- // Serial.print(pitch);
-  Serial.println(masterVolume);
- // Serial.println("-");
+  // For Debugging
+  // Serial.println(finalOut, BIN);
+  // Serial.print(pitch);
+  // Serial.println(masterVolume);
+  // Serial.println("-");
   //Serial.println(inBass.next());
-
 }
-
 
 int updateAudio(){
 
-//  out1 = (bassButton * inBass.next()) + (guitar1Button * inGuitar1.next()) >> 8; 
-//  out2 = (guitar2Button * inGuitar2.next() ) + (guitar3Button * inGuitar3.next()) >> 8;
-//  out = (out1 + out2) >> 8;
-//  finalOut = (out * masterVolume)>>8;
-//  finalOut = ((bassButton * inBass.next()) + (guitar1Button * inGuitar1.next()) + (guitar2Button * inGuitar2.next() ) + (guitar3Button * inGuitar3.next())) * masterVolume;
-
   out = ((bassButton * inBass.next()) + (guitar1Button * inGuitar1.next()) + (guitar2Button * inGuitar2.next() ) + (guitar3Button * inGuitar3.next()));
   finalOut = (out * masterVolume);
-  return finalOut;
-  
+  return finalOut;  
 }
 
 void loop(){
